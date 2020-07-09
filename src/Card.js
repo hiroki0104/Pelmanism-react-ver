@@ -10,7 +10,7 @@ class Card extends Component {
   render() {
     return (
       <div className='Card'>
-        <img src={this.props.imgSrc} alt={this.props.name} />
+        <img onClick={this.props.isOpen} src={this.props.imgSrc} alt={this.props.name} />
       </div>
     );
   }

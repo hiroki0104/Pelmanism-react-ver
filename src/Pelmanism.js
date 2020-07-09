@@ -13,6 +13,7 @@ class Pelmanism extends Component {
       cards: [],
     };
     this.getCards = this.getCards.bind(this);
+    this.handleIsOpen = this.handleIsOpen.bind(this)
   }
   componentDidMount() {
     this.getCards();
@@ -38,10 +39,23 @@ class Pelmanism extends Component {
     this.setState({ cards: initialCards });
   }
 
+  handleIsOpen(id) {
+    console.log(id);
+    this.setState((st) => ({
+      cards: st.cards.map((c) =>
+        c.id === id ? { ...c, isOpen: true} : c
+      ),
+    }));
+  }
+
   render() {
-    const cards = this.state.cards.map((c) => (
-      <Card imgSrc={c.image} alt={c.code} />
-    ));
+    const cards = this.state.cards.map((c) =>
+      c.isOpen ? (
+        <Card key={c.id} imgSrc={c.image} alt={c.code} />
+      ) : (
+        <Card key={c.id} isOpen={() => this.handleIsOpen(c.id)} />
+      )
+    );
 
     return (
       <div className='Pelmanism'>
