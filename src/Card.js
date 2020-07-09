@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import imgSrc from './back-card.jpg';
+import "./Card.css"
 
 class Card extends Component {
   static defaultProps = {

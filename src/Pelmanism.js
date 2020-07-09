@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Card from './Card';
+import './Pelmanism.css';
 
 const BASE_API_URL = 'https://deckofcardsapi.com/api/deck';
 
@@ -38,17 +39,17 @@ class Pelmanism extends Component {
   }
 
   render() {
-
-    const cards = this.state.cards.map(c => (
+    const cards = this.state.cards.map((c) => (
       <Card imgSrc={c.image} alt={c.code} />
-    ))
+    ));
 
     return (
       <div className='Pelmanism'>
-        <h1>Pelmanism</h1>
-        <div className="Pelmanism-list">
-          {cards}
+        <div className='Pelmanism-txt'>
+          <h1>神経衰弱</h1>
+          <h3>あなたのスコアは...</h3>
         </div>
+        <div className='Pelmanism-list'>{cards}</div>
       </div>
     );
   }

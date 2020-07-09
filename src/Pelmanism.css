@@ -1,0 +1,27 @@
+.Pelmanism {
+}
+
+.Pelmanism-txt {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.Pelmanism-txt h3 {
+  margin-left: 5%;
+}
+
+.Pelmanism-list {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Pelmanism-list .Card {
+  width: 15%;
+  margin-right: 5%;
+  margin-left: 5%;
+  margin-bottom: 20px;
+  height: 100px;
+  text-align: center;
+}
