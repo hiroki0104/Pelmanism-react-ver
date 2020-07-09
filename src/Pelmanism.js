@@ -11,20 +11,27 @@ class Pelmanism extends Component {
     this.state = {
       deck: '',
       cards: [],
+      initialCard: '',
+      isFliped: false,
+      timer: 0,
     };
-    this.getCards = this.getCards.bind(this);
-    this.handleIsOpen = this.handleIsOpen.bind(this)
+    this.handleFliep = this.handleFliep.bind(this);
+    this.handleRestart = this.handleRestart.bind(this);
   }
   componentDidMount() {
     this.getCards();
+    // this.firsttimer = new Date().getTime()
+    // console.log(this.firsttimer);
   }
 
+  // 神経衰弱に使うカードの取得
   async getCards() {
     const res_deck = await axios.get(`${BASE_API_URL}/new/shuffle/`);
     this.setState({ deck: res_deck.data });
     const res_cards = await axios.get(
       `${BASE_API_URL}/${this.state.deck.deck_id}/draw/?count=10`
     );
+    // カードのペアを作成
     let initialCards = [];
     for (let i = 0; i < 2; ++i) {
       res_cards.data.cards.forEach((card) => {
@@ -39,21 +46,72 @@ class Pelmanism extends Component {
     this.setState({ cards: initialCards });
   }
 
-  handleIsOpen(id) {
-    console.log(id);
+  // カードを裏返す
+  handleFliep(id) {
+    let selectedCard = this.state.cards.find((c) => c.id === id);
     this.setState((st) => ({
-      cards: st.cards.map((c) =>
-        c.id === id ? { ...c, isOpen: true} : c
-      ),
+      cards: st.cards.map((c) => {
+        if (c.id === id) {
+          return { ...c, isOpen: true };
+        }
+        return c;
+      }),
     }));
+
+    if (!this.state.initialCard) {
+      this.setState({ initialCard: selectedCard });
+      return;
+    }
+
+    // ペアの判定 -
+    // 外れ
+    if (this.state.initialCard.code !== selectedCard.code) {
+      this.setState({ isFliped: true });
+      setTimeout(() => {
+        this.setState((st) => ({
+          cards: st.cards.map((c) => {
+            if (c.id === id || c.id === this.state.initialCard.id) {
+              return { ...c, isOpen: false };
+            }
+            return c;
+          }),
+          initialCard: '',
+          isFliped: false,
+        }));
+      }, 2000);
+    }
+    // 当たり
+    else {
+      this.setState({ initialCard: '' });
+    }
+  }
+
+  handleRestart() {
+    this.getCards();
   }
 
   render() {
+    const isWinning = this.state.cards.every((c) => c.isOpen);
+    if (isWinning) {
+      return (
+        <div className='Pelmanism'>
+          おめでとうございます！すべてそろいました
+          <button onClick={this.handleRestart}>Restart</button>
+        </div>
+      );
+    }
     const cards = this.state.cards.map((c) =>
       c.isOpen ? (
         <Card key={c.id} imgSrc={c.image} alt={c.code} />
       ) : (
-        <Card key={c.id} isOpen={() => this.handleIsOpen(c.id)} />
+        <Card
+          key={c.id}
+          isOpen={
+            !this.state.isFliped
+              ? () => this.handleFliep(c.id)
+              : () => console.log('取り込み中です')
+          }
+        />
       )
     );
 
@@ -61,7 +119,6 @@ class Pelmanism extends Component {
       <div className='Pelmanism'>
         <div className='Pelmanism-txt'>
           <h1>神経衰弱</h1>
-          <h3>あなたのスコアは...</h3>
         </div>
         <div className='Pelmanism-list'>{cards}</div>
       </div>
