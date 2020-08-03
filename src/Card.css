@@ -1,0 +1,7 @@
+.Card {
+  cursor: pointer;
+}
+
+.Card img {
+  height: 100%;
+}

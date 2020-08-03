@@ -1,0 +1,43 @@
+.Pelmanism-txt {
+  width: 75%;
+  margin: 0 auto;
+  text-align: center;
+  transform: translateX(-3%);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #887fd8;
+  border: 1px solid #cccccc;
+  border-radius: 10px;
+}
+
+.Pelmanism-list {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Pelmanism-list .Card {
+  width: 15%;
+  margin-right: 5%;
+  margin-bottom: 20px;
+  height: 150px;
+  text-align: center;
+}
+
+.Pelmanism-list .Card:nth-of-type(5n) {
+  margin-right: 0;
+}
+
+.Pelmanism-txt .btn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.btn {
+  padding: 0.7rem;
+  background-color: #ccffcc;
+  border: 1px solid #ccffcc;
+  outline: none;
+  display: inline-block;
+}
