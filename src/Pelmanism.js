@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Card from './Card';
 import './Pelmanism.css';
+import { shaffle } from './util/helper';
 
 const BASE_API_URL = 'https://deckofcardsapi.com/api/deck';
 
@@ -13,15 +14,12 @@ class Pelmanism extends Component {
       cards: [],
       initialCard: '',
       isFliped: false,
-      timer: 0,
     };
     this.handleFliep = this.handleFliep.bind(this);
     this.handleRestart = this.handleRestart.bind(this);
   }
   componentDidMount() {
     this.getCards();
-    // this.firsttimer = new Date().getTime()
-    // console.log(this.firsttimer);
   }
 
   // 神経衰弱に使うカードの取得
@@ -43,7 +41,9 @@ class Pelmanism extends Component {
         });
       });
     }
-    this.setState({ cards: initialCards });
+    const randomCards = shaffle(initialCards);
+
+    this.setState({ cards: randomCards });
   }
 
   // カードを裏返す
@@ -78,7 +78,7 @@ class Pelmanism extends Component {
           initialCard: '',
           isFliped: false,
         }));
-      }, 2000);
+      }, 1500);
     }
     // 当たり
     else {
@@ -92,14 +92,6 @@ class Pelmanism extends Component {
 
   render() {
     const isWinning = this.state.cards.every((c) => c.isOpen);
-    if (isWinning) {
-      return (
-        <div className='Pelmanism'>
-          おめでとうございます！すべてそろいました
-          <button onClick={this.handleRestart}>Restart</button>
-        </div>
-      );
-    }
     const cards = this.state.cards.map((c) =>
       c.isOpen ? (
         <Card key={c.id} imgSrc={c.image} alt={c.code} />
@@ -109,7 +101,7 @@ class Pelmanism extends Component {
           isOpen={
             !this.state.isFliped
               ? () => this.handleFliep(c.id)
-              : () => console.log('取り込み中です')
+              : () => alert('取り込み中です')
           }
         />
       )
@@ -119,6 +111,16 @@ class Pelmanism extends Component {
       <div className='Pelmanism'>
         <div className='Pelmanism-txt'>
           <h1>神経衰弱</h1>
+          {isWinning && (
+            <div className='Pelmanism-result'>
+              <span>おめでとうございます！すべてそろいました</span>
+              <div>
+                <button className='btn' onClick={this.handleRestart}>
+                  Restart
+                </button>
+              </div>
+            </div>
+          )}
         </div>
         <div className='Pelmanism-list'>{cards}</div>
       </div>
